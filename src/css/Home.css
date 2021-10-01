@@ -12,3 +12,7 @@
     justify-content: center;
     flex-wrap: wrap;
 }
+*{
+    text-decoration: none;
+    box-sizing: border-box;
+}
