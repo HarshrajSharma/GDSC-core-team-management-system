@@ -1,5 +1,11 @@
 .home{
-    background-color: antiquewhite;
+    text-align: center;
+}
+.home h1{
+    font-size: 40px;
+}
+.homeCards{
+    /* background-color: antiquewhite; */
     padding: 40px;
     display: flex;
     align-items: center;

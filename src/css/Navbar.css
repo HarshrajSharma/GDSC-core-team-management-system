@@ -1,10 +1,10 @@
 .navbar{
-    background-color: aquamarine;
-    width: 100%;
+    width: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
+    box-shadow: 0 0 10px #ccc;
 }
 .logo{
     width: 220px;
