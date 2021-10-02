@@ -26,6 +26,14 @@ export default function Home(){
                         detail="Add Teams"
                     />
                 </Link>
+                <Link to="/allteams" >
+                    <AddCards
+                        title="View All Core Teams"
+                        image={Team}
+                        alt="user"
+                        detail="Add Teams"
+                    />
+                </Link>
             </div>
             
         </div>
