@@ -1,20 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/AddUsers.css"
 
 import axios from "axios";
 export default function CoreTeamYearCheck(){
     const[year, setYear]=useState("");
     const[lead, setLead]=useState("");
+    let [coreMembers]=useState([]);
+    useEffect(()=>{
+        axios.get(process.env.REACT_APP_SERVER + "/coreuser")
+        .then((response)=>{
+
+            response.data.forEach(element => {
+                coreMembers.push(element);
+            });
+        })
+    },[]);
 
     async function handleSubmit(e){
-
+        e.preventDefault();
         const newCoreTeam={
             year: year,
             lead: lead
         }
-        await axios.post("http://localhost:5000/createnewcoreteam", newCoreTeam)
+        await axios.post(process.env.REACT_APP_SERVER + "/createnewcoreteam", newCoreTeam)
         .then((response)=>{
-            console.log(response);
+            console.log(response.data);
+            alert(response.data);
         })
     }
 
@@ -26,6 +37,7 @@ export default function CoreTeamYearCheck(){
                 <input 
                     type="number"  
                     value={year}
+                    required
                     onChange={(e)=>{
                         setYear(e.target.value);
                     }}
@@ -38,7 +50,11 @@ export default function CoreTeamYearCheck(){
                     setLead(selectedValue);
                 }} >
                     <option selected >None</option>
-                    <option>Apple</option>
+                    {coreMembers.map((element)=>{
+                        return(
+                            <option>{element.name} {element.department} {element.batch}</option>
+                        )
+                    })}
                 </select>
                 <button type="submit" >Create</button>
             </form>
