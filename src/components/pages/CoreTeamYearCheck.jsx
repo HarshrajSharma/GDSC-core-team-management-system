@@ -5,15 +5,16 @@ import axios from "axios";
 export default function CoreTeamYearCheck(){
     const[year, setYear]=useState("");
     const[lead, setLead]=useState("");
-    let [coreMembers]=useState([]);
+    let [coreMembers, setCoreMembers]=useState([]);
     useEffect(()=>{
+        let cm=[];
         axios.get(process.env.REACT_APP_SERVER + "/coreuser")
         .then((response)=>{
-
             response.data.forEach(element => {
-                coreMembers.push(element);
+                cm.push(element);
             });
         })
+        setCoreMembers(cm);
     },[]);
 
     async function handleSubmit(e){
