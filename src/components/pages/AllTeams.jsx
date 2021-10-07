@@ -14,7 +14,7 @@ export default function AllTeams(){
             let a=[];
             axios.get(process.env.REACT_APP_SERVER + "/coreteam")
             .then((response)=>{
-                response.data.forEach((element) => {
+                    response.data.forEach((element) => {
                     a.push(element);
                 })
                 setTeams(a);
