@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import "../../css/AddUsers.css"
 
 import axios from "axios";
+import UserIcon from "../../images/userIcon.png"
 export default function CoreTeamYearCheck(){
     const [year, setYear]=useState("");
     const [leadName, setLeadName] = useState("");
     const [department, setDepartment] = useState("");
     const [batch, setBatch] = useState("");
-    const [postImageBase64, setPostImageBase64] = useState("");
+    const [postImageBase64, setPostImageBase64] = useState(UserIcon);
     const [linkedIn, setLinkedIn] = useState("");
     const [github, setGithub] = useState("");    
 
@@ -73,6 +74,9 @@ export default function CoreTeamYearCheck(){
                         setYear(e.target.value);
                     }}
                 />
+                <div style={{width: "100%", textAlign: "center"}} >
+                    <img src={postImageBase64} alt="UserImage" style={{width: "100px", height: "100px", borderRadius: "50%", marginTop: "5px"}}/>
+                </div>
                 <label>Lead Name</label>
                 <input
                     type="text"

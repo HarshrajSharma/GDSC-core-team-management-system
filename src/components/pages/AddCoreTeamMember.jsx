@@ -3,6 +3,7 @@ import axios from "axios"
 
 import MemberCard from "../MemberCard";
 import "../../css/AddUsers.css"
+import UserIcon from "../../images/userIcon.png"
 export default function  AddCoreTeamMember(props){
 
 
@@ -10,7 +11,7 @@ export default function  AddCoreTeamMember(props){
     const [name, setName] = useState("");
     const [department, setDepartment] = useState("");
     const [batch, setBatch] = useState("");
-    const [postImageBase64, setPostImageBase64] = useState("");
+    const [postImageBase64, setPostImageBase64] = useState(UserIcon);
     const [linkedin, setLinkedin] = useState("");
     const [github, setGithub] = useState("");    
     const [role, setRole]=useState();
@@ -102,6 +103,9 @@ export default function  AddCoreTeamMember(props){
             <div className="addUserFormDiv" >
             <h1>Create a new core team member</h1>
             <form className="addUserForm" onSubmit={handleSubmit} >
+                <div style={{width: "100%", textAlign: "center"}} >
+                    <img src={postImageBase64} alt="UserImage" style={{width: "100px", height: "100px", borderRadius: "50%"}}/>
+                </div>
                 <label>Name</label>
                 <input
                     type="text"
