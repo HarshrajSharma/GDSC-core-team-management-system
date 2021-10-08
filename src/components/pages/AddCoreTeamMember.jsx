@@ -6,12 +6,16 @@ import "../../css/AddUsers.css"
 export default function  AddCoreTeamMember(props){
 
 
-    const[coreUser, setCoreUser]=useState([]);
-    const[coreTeam, setCoreTeam]=useState([]);
-    const[name, setName]=useState();
-    const[role, setRole]=useState();
+    const [coreUser, setCoreUser]=useState([]);
+    const [coreTeam, setCoreTeam]=useState([]);
+    const [name, setName] = useState("");
+    const [department, setDepartment] = useState("");
+    const [batch, setBatch] = useState("");
+    const [postImageBase64, setPostImageBase64] = useState("");
+    const [linkedin, setLinkedin] = useState("");
+    const [github, setGithub] = useState("");    
+    const [role, setRole]=useState();
 
-    let a=1;
     //Making get request to get all core members
     useEffect(()=>{
         let cm=[];
@@ -47,13 +51,43 @@ export default function  AddCoreTeamMember(props){
 
    async function handleSubmit(){
         //Making post request to all members to specific collection 
-        await axios.post(process.env.REACT_APP_SERVER + "/addmemberstoteam", {"year": props.year, "name": name, "role": role})
+        await axios.post(process.env.REACT_APP_SERVER + "/addmemberstoteam", 
+            {
+                "year": props.year, 
+                "name": name, 
+                "department": department,
+                "batch": batch,
+                "image": postImageBase64,
+                "linkedIn": linkedin,
+                "github": github,
+                "role": role
+            })
         .then((response)=>{
          console.log(response.data);
         });
         setName("");
         setRole("");
    }
+
+   const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    })
+   function handleFileChange(e) {
+
+    console.log(e.target.files[0]);
+    const uploadedFile = e.target.files[0];
+    toBase64(uploadedFile)
+        .then((res) => {
+            // console.log(res)
+            setPostImageBase64(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
     return(
         <div>
             <div className="addUserFormDiv" style={{height:"auto"}} >
@@ -64,37 +98,76 @@ export default function  AddCoreTeamMember(props){
                             <MemberCard
                                 name={element.name}
                                 role={element.role}
+                                image={element.image}
                             />
                         )
                     })}
                 </div>
             </div>
-            <div className="addUserFormDiv">
-
-            {/* This section will show the current members of the team */}
-            
 
 
-                {/* This Section is for adding new users to the team */}
-                <h1>Add members to {props.year} team.</h1>
-                <form className="addUserForm" onSubmit={handleSubmit} >
-                    <label>Name</label>
-                    <select id="selectAddNewName" onChange={()=>{
-                        var selectBox = document.getElementById("selectAddNewName");
-                        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-                        // alert(selectedValue);
-                        setName(selectedValue);
-                    }} >
 
-                        <option selected >Select Member</option>
-                        {coreUser.map((element)=>{
-                            return(
-                                <option>{element.name}</option>
-                            )
-                        })}
-                    </select>
 
-                    <label>Role</label>
+            {/* This form will create a new member in the core team */}
+            <div className="addUserFormDiv" >
+            <h1>Create a new core team member</h1>
+            <form className="addUserForm" onSubmit={handleSubmit} >
+                <label>Name</label>
+                <input
+                    type="text"
+                    onChange={(e) => {
+                        setName(e.target.value)
+                    }}
+                    value={name}
+                    required
+                />
+
+                <label>Department</label>
+                <input 
+                    type="text"
+                    value={department}
+                    onChange={(e)=>{
+                        setDepartment(e.target.value)
+                    }} />
+
+                <label>Batch</label>
+                <select id="selectBatchBox" onChange={() => {
+
+                    var selectBox = document.getElementById("selectBatchBox");
+                    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+                    // alert(selectedValue);
+                    setBatch(selectedValue);
+                }} >
+                    <option selected >None</option>
+                    <option>2019</option>
+                    <option>2020</option>
+                    <option>2021</option>
+                    <option>2022</option>
+                    <option>2023</option>
+                    <option>2024</option>
+                    <option>2025</option>
+                    <option>2026</option>
+                </select>
+
+                <label>LinkedIn</label>
+                <input 
+                 type="text" 
+                 value={linkedin}
+                 onChange={(e)=>{
+                     setLinkedin(e.target.value);
+                 }}
+                />
+
+                <label>Github</label>
+                <input 
+                    type="text" 
+                    value={github}
+                    onChange={(e)=>{
+                        setGithub(e.target.value);
+                    }}
+                />
+                
+                <label>Role</label>
                     <select id="selectAddNewRole" onChange={()=>{
                         var selectBox = document.getElementById("selectAddNewRole");
                         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -123,9 +196,12 @@ export default function  AddCoreTeamMember(props){
                         <option>Game Developer</option>
 
                     </select>
-                    <button type="submit" >Submit</button>
-                </form>
-            </div>
+                    <label>Upload Image</label>
+                    <input id="file-input" type="file" accept="image/*" onChange={handleFileChange}  />
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
         </div>
     )
 } 
