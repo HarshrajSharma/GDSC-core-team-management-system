@@ -6,7 +6,6 @@ import "../../css/AddUsers.css"
 export default function  AddCoreTeamMember(props){
 
 
-    const [coreUser, setCoreUser]=useState([]);
     const [coreTeam, setCoreTeam]=useState([]);
     const [name, setName] = useState("");
     const [department, setDepartment] = useState("");
@@ -16,17 +15,7 @@ export default function  AddCoreTeamMember(props){
     const [github, setGithub] = useState("");    
     const [role, setRole]=useState();
 
-    //Making get request to get all core members
-    useEffect(()=>{
-        let cm=[];
-        axios.get(process.env.REACT_APP_SERVER  + "/coreuser")
-        .then((response)=>{
-            response.data.forEach(element => {
-                cm.push(element);
-            });
-            setCoreUser(cm);
-        })
-    },[]);
+   
 
     //Fetch members for a specific year and add it to coreTeam state
     async function showMember(){
@@ -47,6 +36,7 @@ export default function  AddCoreTeamMember(props){
     }
     useEffect(()=>{
        showMember();
+       // eslint-disable-next-line
     },[]);
 
    async function handleSubmit(){
@@ -87,7 +77,7 @@ export default function  AddCoreTeamMember(props){
         .catch((err) => {
             console.log(err);
         });
-}
+    }
     return(
         <div>
             <div className="addUserFormDiv" style={{height:"auto"}} >
@@ -135,7 +125,7 @@ export default function  AddCoreTeamMember(props){
 
                     var selectBox = document.getElementById("selectBatchBox");
                     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-                    // alert(selectedValue);
+                    // alert(selectedValue)
                     setBatch(selectedValue);
                 }} >
                     <option selected >None</option>
@@ -171,7 +161,7 @@ export default function  AddCoreTeamMember(props){
                     <select id="selectAddNewRole" onChange={()=>{
                         var selectBox = document.getElementById("selectAddNewRole");
                         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-                        // alert(selectedValue);
+                        // alert(selectedValue)
                         setRole(selectedValue);
                     }} >
 

@@ -9,15 +9,7 @@ export default function Home(){
         <div className="home" >
             <h1>👋 Welcome, to the GDSC HIT core team management system.</h1>
             <div className="homeCards" >
-                <Link to="/createuser" >
-                    <AddCards
-                        title="Create a new core team member"
-                        image={User}
-                        alt="user"
-                        detail="Add Users"
-                        onClick="Hello"
-                    />
-                </Link>
+                   
                 <Link to="/createteam" >
                     <AddCards
                         title="Create a new core team "
@@ -29,7 +21,7 @@ export default function Home(){
                 <Link to="/allteams" >
                     <AddCards
                         title="View all teams and add team members"
-                        image={Team}
+                        image={User}
                         alt="user"
                         detail="Add Core Team Members"
                     />
