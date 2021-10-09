@@ -90,6 +90,8 @@ export default function  AddCoreTeamMember(props){
                                 name={element.name}
                                 role={element.role}
                                 image={element.image}
+                                linkedIn={element.linkedIn}
+                                github={element.github}
                             />
                         )
                     })}
