@@ -11,20 +11,23 @@ export default function CoreTeamYearCheck(){
     const [postImageBase64, setPostImageBase64] = useState(UserIcon);
     const [linkedIn, setLinkedIn] = useState("");
     const [github, setGithub] = useState("");    
-
+    const [image, setImage]=useState();
 
     async function handleSubmit(e){
         e.preventDefault();
-        const newCoreTeam={
-            year: year,
-            leadName: leadName,
-            department: department,
-            batch: batch,
-            linkedIn: linkedIn,
-            github: github,
-            image: postImageBase64,
-        }
-        await axios.post(process.env.REACT_APP_SERVER + "/createnewcoreteam", newCoreTeam)
+        //Createing new form data
+        const data = new FormData();
+
+        //Apending the image to image json "image is name for the image input" json that is sent is {image: "theImage"}
+        data.append('image', image);
+        data.append('year', year);
+        data.append('leadName', leadName);
+        data.append('department', department);
+        data.append('batch', batch);
+        data.append('linkedIn', linkedIn);
+        data.append('github', github);
+        
+        await axios.post(process.env.REACT_APP_SERVER + "/createnewcoreteam", data)
         .then((response)=>{
             console.log(response.data);
             alert(response.data);
@@ -33,7 +36,7 @@ export default function CoreTeamYearCheck(){
         setLeadName("");
         setDepartment("");
         setBatch("");
-        setPostImageBase64("");
+        setPostImageBase64(UserIcon);
         setLinkedIn("");
         setGithub("");
     }
@@ -46,6 +49,8 @@ export default function CoreTeamYearCheck(){
    function handleFileChange(e) {
 
     console.log(e.target.files[0]);
+    //We get the file in files[0]
+    setImage(e.target.files[0]);
     const uploadedFile = e.target.files[0];
     toBase64(uploadedFile)
         .then((res) => {
@@ -64,7 +69,7 @@ export default function CoreTeamYearCheck(){
 
 
 
-            <form className="addUserForm" onSubmit={handleSubmit} >
+            <form className="addUserForm" onSubmit={handleSubmit} encType="multipart/form-data" method="POST">
                 <label>Enter Year</label>
                 <input 
                     type="number"  
@@ -91,6 +96,7 @@ export default function CoreTeamYearCheck(){
                 <input 
                     type="text"
                     value={department}
+                    required
                     onChange={(e)=>{
                         setDepartment(e.target.value)
                     }} />
@@ -118,6 +124,7 @@ export default function CoreTeamYearCheck(){
                 <input 
                  type="text" 
                  value={linkedIn}
+                 
                  onChange={(e)=>{
                      setLinkedIn(e.target.value);
                  }}
@@ -134,7 +141,7 @@ export default function CoreTeamYearCheck(){
                 
                 
                     <label>Upload Image</label>
-                    <input id="file-input" type="file" accept="image/*" onChange={handleFileChange}  />
+                    <input name="image" id="file-input" type="file" accept="image/*" onChange={handleFileChange}  />
 
                 <button type="submit">Create</button>
             </form>

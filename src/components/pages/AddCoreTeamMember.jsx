@@ -11,8 +11,9 @@ export default function  AddCoreTeamMember(props){
     const [name, setName] = useState("");
     const [department, setDepartment] = useState("");
     const [batch, setBatch] = useState("");
+    const [image, setImage]=useState();
     const [postImageBase64, setPostImageBase64] = useState(UserIcon);
-    const [linkedin, setLinkedin] = useState("");
+    const [linkedIn, setLinkedIn] = useState("");
     const [github, setGithub] = useState("");    
     const [role, setRole]=useState();
 
@@ -40,24 +41,33 @@ export default function  AddCoreTeamMember(props){
        // eslint-disable-next-line
     },[]);
 
-   async function handleSubmit(){
+   async function handleSubmit(e){
+       
+        e.preventDefault();
+       //Createing new form data
+       const data = new FormData();
+
+       //Apending the image to image json "image is name for the image input" json that is sent is {image: "theImage"}
+       data.append('image', image);
+       data.append('year', props.year);
+       data.append('name', name);
+       data.append('department', department);
+       data.append('batch', batch);
+       data.append('linkedIn', linkedIn);
+       data.append('github', github);
+       data.append('role', role);
+       
         //Making post request to all members to specific collection 
-        await axios.post(process.env.REACT_APP_SERVER + "/addmemberstoteam", 
-            {
-                "year": props.year, 
-                "name": name, 
-                "department": department,
-                "batch": batch,
-                "image": postImageBase64,
-                "linkedIn": linkedin,
-                "github": github,
-                "role": role
-            })
+        await axios.post(process.env.REACT_APP_SERVER + "/addmemberstoteam", data)
         .then((response)=>{
          console.log(response.data);
+         showMember();
         });
+        setPostImageBase64(UserIcon);
         setName("");
-        setRole("");
+        setDepartment("");
+        setLinkedIn("");
+        setGithub("");
    }
 
    const toBase64 = file => new Promise((resolve, reject) => {
@@ -69,6 +79,8 @@ export default function  AddCoreTeamMember(props){
    function handleFileChange(e) {
 
     console.log(e.target.files[0]);
+    //We get the file in files[0]
+    setImage(e.target.files[0]);
     const uploadedFile = e.target.files[0];
     toBase64(uploadedFile)
         .then((res) => {
@@ -104,7 +116,7 @@ export default function  AddCoreTeamMember(props){
             {/* This form will create a new member in the core team */}
             <div className="addUserFormDiv" >
             <h1>Create a new core team member</h1>
-            <form className="addUserForm" onSubmit={handleSubmit} >
+            <form className="addUserForm" onSubmit={handleSubmit} encType="multipart/form-data" method="POST" >
                 <div style={{width: "100%", textAlign: "center"}} >
                     <img src={postImageBase64} alt="UserImage" style={{width: "100px", height: "100px", borderRadius: "50%"}}/>
                 </div>
@@ -122,6 +134,7 @@ export default function  AddCoreTeamMember(props){
                 <input 
                     type="text"
                     value={department}
+                    required
                     onChange={(e)=>{
                         setDepartment(e.target.value)
                     }} />
@@ -148,9 +161,9 @@ export default function  AddCoreTeamMember(props){
                 <label>LinkedIn</label>
                 <input 
                  type="text" 
-                 value={linkedin}
+                 value={linkedIn}
                  onChange={(e)=>{
-                     setLinkedin(e.target.value);
+                     setLinkedIn(e.target.value);
                  }}
                 />
 
@@ -193,7 +206,7 @@ export default function  AddCoreTeamMember(props){
 
                     </select>
                     <label>Upload Image</label>
-                    <input id="file-input" type="file" accept="image/*" onChange={handleFileChange}  />
+                    <input name="image" id="file-input" type="file" accept="image/*" onChange={handleFileChange}  />
 
                 <button type="submit">Submit</button>
             </form>
